@@ -55,9 +55,9 @@ function is_6tunnel_running {
 function start_6tunnel_process {
   local pid_file=$(get_6tunnel_pid_file $1)
   if test -x $T6BIN ;then
-    # Redirect IPv6 to IPv4
+    # Redirect IPv4 to IPv6 
     # https://serverfault.com/questions/276515/use-iptables-to-forward-ipv6-to-ipv4
-    $T6BIN -p $pid_file -6 $1 $DST -4 $1
+    $T6BIN -p $pid_file -4 $1 $DST -6 $1
     return 0 # 0 = true
   fi
   return 1 # 1 = false
