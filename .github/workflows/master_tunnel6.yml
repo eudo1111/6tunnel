@@ -1,0 +1,34 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - tunnel6
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://quay.io/vis-doe/
+        username: ${{ secrets.AzureAppService_ContainerUsername_0b49f6ef7c18441382c18c906f5148e7 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_38c9607014254865af2357a22a63e06e }}
+
+    - run: |
+        docker build . -t quay.io/vis-doe/${{ secrets.AzureAppService_ContainerUsername_0b49f6ef7c18441382c18c906f5148e7 }}/tunnel6:${{ github.sha }}
+        docker push quay.io/vis-doe/${{ secrets.AzureAppService_ContainerUsername_0b49f6ef7c18441382c18c906f5148e7 }}/tunnel6:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'tunnel6'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_c11318559bbf488896491d91caca12a8 }}
+        images: 'quay.io/vis-doe/${{ secrets.AzureAppService_ContainerUsername_0b49f6ef7c18441382c18c906f5148e7 }}/tunnel6:${{ github.sha }}'
