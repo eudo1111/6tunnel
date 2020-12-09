@@ -8,4 +8,4 @@ T6INTERVAL=${INTERVAL:-10m}
 # Binary
 T6BIN="6tunnel"
 
-$T6BIN -p /tmp/6tunnel.pid -4 -f 443 $DST 443
+$T6BIN -p /tmp/6tunnel.pid -4 -f 443 $DST 443 -v
